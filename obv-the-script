@@ -1,0 +1,177 @@
+-- Создаем LocalScript
+local UserInputService = game:GetService("UserInputService")
+local Players = game:GetService("Players")
+local Player = Players.LocalPlayer
+local Character = Player.Character or Player.CharacterAdded:Wait()
+local Humanoid = Character:WaitForChild("Humanoid")
+
+local flying = false
+local flySpeed = 50
+local walkSpeed = 16
+local bodyVelocity
+local teleporting = false
+local guiVisible = true -- Переменная для отслеживания видимости GUI
+
+-- Создание GUI
+local screenGui = Instance.new("ScreenGui")
+local frame = Instance.new("Frame")
+local titleLabel = Instance.new("TextLabel")
+local flyButton = Instance.new("TextButton")
+local flightSpeedInput = Instance.new("TextBox")
+local walkSpeedInput = Instance.new("TextBox")
+local teleportToggle = Instance.new("TextButton")
+local exitLabel = Instance.new("TextLabel") -- Новый текстовый элемент для выхода
+
+screenGui.Parent = Player:WaitForChild("PlayerGui")
+frame.Size = UDim2.new(0, 300, 0, 450)
+frame.Position = UDim2.new(1, -300, 0.5, -225) -- Позиция справа
+frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+frame.BorderSizePixel = 0
+frame.Active = true
+frame.Draggable = true
+frame.Parent = screenGui
+
+titleLabel.Size = UDim2.new(1, 0, 0, 50)
+titleLabel.Text = "ozerco beta version" -- Изменено название
+titleLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+titleLabel.Font = Enum.Font.SciFi -- Изменен шрифт на SciFi
+titleLabel.TextScaled = true
+titleLabel.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+titleLabel.Parent = frame
+
+-- Кнопка полета
+flyButton.Size = UDim2.new(1, 0, 0, 50)
+flyButton.Position = UDim2.new(0, 0, 0.1, 0)
+flyButton.Text = "Toggle Flight"
+flyButton.Font = Enum.Font.FredokaOne
+flyButton.TextScaled = true
+flyButton.BackgroundColor3 = Color3.fromRGB(100, 100, 255)
+flyButton.Parent = frame
+
+-- Поле ввода скорости полета
+flightSpeedInput.Size = UDim2.new(1, 0, 0, 50)
+flightSpeedInput.Position = UDim2.new(0, 0, 0.22, 0) -- Дивиден между кнопками
+flightSpeedInput.Text = "Flight Speed: " .. flySpeed
+flightSpeedInput.Font = Enum.Font.FredokaOne
+flightSpeedInput.TextScaled = true
+flightSpeedInput.BackgroundColor3 = Color3.fromRGB(255, 200, 100)
+flightSpeedInput.Parent = frame
+
+-- Поле ввода скорости ходьбы
+walkSpeedInput.Size = UDim2.new(1, 0, 0, 50)
+walkSpeedInput.Position = UDim2.new(0, 0, 0.34, 0) -- Дивиден между кнопками
+walkSpeedInput.Text = "Walk Speed: " .. walkSpeed
+walkSpeedInput.Font = Enum.Font.FredokaOne
+walkSpeedInput.TextScaled = true
+walkSpeedInput.BackgroundColor3 = Color3.fromRGB(255, 100, 200)
+walkSpeedInput.Parent = frame
+
+-- Переключение телепортации
+teleportToggle.Size = UDim2.new(1, 0, 0, 50)
+teleportToggle.Position = UDim2.new(0, 0, 0.46, 0) -- Дивиден между кнопками
+teleportToggle.Text = "Toggle Teleport"
+teleportToggle.Font = Enum.Font.FredokaOne
+teleportToggle.TextScaled = true
+teleportToggle.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+teleportToggle.Parent = frame
+
+-- Надпись для выхода
+exitLabel.Size = UDim2.new(1, 0, 0, 30) -- Установите размер надписи
+exitLabel.Position = UDim2.new(0, 0, 0.9, 0) -- Установите позицию внизу
+exitLabel.Text = "Нажмите Q чтобы выйти из озерца"
+exitLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+exitLabel.Font = Enum.Font.FredokaOne
+exitLabel.TextScaled = true
+exitLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255) -- Фон, чтобы текст выделялся
+exitLabel.Parent = frame
+
+-- Функция для полета
+local function toggleFly()
+	flying = not flying
+	if flying then
+		Humanoid.PlatformStand = true
+		bodyVelocity = Instance.new("BodyVelocity")
+		bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+		bodyVelocity.MaxForce = Vector3.new(4000, 4000, 4000)
+		bodyVelocity.Parent = Character.HumanoidRootPart
+	else
+		Humanoid.PlatformStand = false
+		bodyVelocity:Destroy()
+	end
+end
+
+local function fly()
+	while flying do
+		wait(0.1)
+		local camera = workspace.CurrentCamera
+		local direction = camera.CFrame.LookVector
+
+		bodyVelocity.Velocity = Vector3.new(0, 0, 0)
+		if UserInputService:IsKeyDown(Enum.KeyCode.W) then
+			bodyVelocity.Velocity = bodyVelocity.Velocity + direction * flySpeed
+		end
+		if UserInputService:IsKeyDown(Enum.KeyCode.S) then
+			bodyVelocity.Velocity = bodyVelocity.Velocity - direction * flySpeed
+		end
+		if UserInputService:IsKeyDown(Enum.KeyCode.A) then
+			bodyVelocity.Velocity = bodyVelocity.Velocity - camera.CFrame.RightVector * flySpeed
+		end
+		if UserInputService:IsKeyDown(Enum.KeyCode.D) then
+			bodyVelocity.Velocity = bodyVelocity.Velocity + camera.CFrame.RightVector * flySpeed
+		end
+
+		if UserInputService:IsKeyDown(Enum.KeyCode.Space) then
+			bodyVelocity.Velocity = bodyVelocity.Velocity + Vector3.new(0, flySpeed, 0)
+		end
+		if UserInputService:IsKeyDown(Enum.KeyCode.LeftControl) then
+			bodyVelocity.Velocity = bodyVelocity.Velocity - Vector3.new(0, flySpeed, 0)
+		end
+	end
+end
+
+-- Подключение к событию нажатия кнопки
+flyButton.MouseButton1Click:Connect(function()
+	toggleFly()
+	if flying then
+		fly()
+	end
+end)
+
+-- Управление изменением скорости полета
+flightSpeedInput.FocusLost:Connect(function(enterPressed)
+	if enterPressed then
+		flySpeed = tonumber(flightSpeedInput.Text) or flySpeed
+		flightSpeedInput.Text = "Flight Speed: " .. flySpeed
+	end
+end)
+
+-- Управление изменением скорости ходьбы
+walkSpeedInput.FocusLost:Connect(function(enterPressed)
+	if enterPressed then
+		walkSpeed = tonumber(walkSpeedInput.Text) or walkSpeed
+		Humanoid.WalkSpeed = walkSpeed
+		walkSpeedInput.Text = "Walk Speed: " .. walkSpeed
+	end
+end)
+
+-- Обработчик телепортации
+teleportToggle.MouseButton1Click:Connect(function()
+	teleporting = not teleporting
+	teleportToggle.Text = teleporting and "Teleport: ON" or "Teleport: OFF"
+end)
+
+-- Обработчик нажатия кнопки мыши для телепортации
+Player:GetMouse().Button1Down:Connect(function()
+	if teleporting and Character and Character:FindFirstChild("HumanoidRootPart") then
+		local targetPosition = Player:GetMouse().Hit.p
+		Character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+	end
+end)
+
+-- Обработчик нажатия клавиши Q для открытия/закрытия GUI
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+	if not gameProcessed and input.KeyCode == Enum.KeyCode.Q then
+		guiVisible = not guiVisible
+		frame.Visible = guiVisible
+	end
+end)
