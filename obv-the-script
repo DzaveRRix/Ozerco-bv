@@ -25,7 +25,7 @@ local exitLabel = Instance.new("TextLabel") -- Новый текстовый э�
 screenGui.Parent = Player:WaitForChild("PlayerGui")
 frame.Size = UDim2.new(0, 300, 0, 450)
 frame.Position = UDim2.new(1, -300, 0.5, -225) -- Позиция справа
-frame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+frame.BackgroundColor3 = Color3.fromRGB(130, 88, 84)
 frame.BorderSizePixel = 0
 frame.Active = true
 frame.Draggable = true
@@ -33,10 +33,10 @@ frame.Parent = screenGui
 
 titleLabel.Size = UDim2.new(1, 0, 0, 50)
 titleLabel.Text = "ozerco beta version" -- Изменено название
-titleLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
+titleLabel.TextColor3 = Color3.fromRGB(224, 252, 255)
 titleLabel.Font = Enum.Font.SciFi -- Изменен шрифт на SciFi
 titleLabel.TextScaled = true
-titleLabel.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
+titleLabel.BackgroundColor3 = Color3.fromRGB(48, 42, 31)
 titleLabel.Parent = frame
 
 -- Кнопка полета
@@ -45,7 +45,7 @@ flyButton.Position = UDim2.new(0, 0, 0.1, 0)
 flyButton.Text = "Toggle Flight"
 flyButton.Font = Enum.Font.FredokaOne
 flyButton.TextScaled = true
-flyButton.BackgroundColor3 = Color3.fromRGB(100, 100, 255)
+flyButton.BackgroundColor3 = Color3.fromRGB(231, 211, 188)
 flyButton.Parent = frame
 
 -- Поле ввода скорости полета
@@ -54,7 +54,7 @@ flightSpeedInput.Position = UDim2.new(0, 0, 0.22, 0) -- Дивиден межд�
 flightSpeedInput.Text = "Flight Speed: " .. flySpeed
 flightSpeedInput.Font = Enum.Font.FredokaOne
 flightSpeedInput.TextScaled = true
-flightSpeedInput.BackgroundColor3 = Color3.fromRGB(255, 200, 100)
+flightSpeedInput.BackgroundColor3 = Color3.fromRGB(218, 213, 155)
 flightSpeedInput.Parent = frame
 
 -- Поле ввода скорости ходьбы
@@ -63,7 +63,7 @@ walkSpeedInput.Position = UDim2.new(0, 0, 0.34, 0) -- Дивиден между 
 walkSpeedInput.Text = "Walk Speed: " .. walkSpeed
 walkSpeedInput.Font = Enum.Font.FredokaOne
 walkSpeedInput.TextScaled = true
-walkSpeedInput.BackgroundColor3 = Color3.fromRGB(255, 100, 200)
+walkSpeedInput.BackgroundColor3 = Color3.fromRGB(161, 148, 110)
 walkSpeedInput.Parent = frame
 
 -- Переключение телепортации
@@ -72,17 +72,17 @@ teleportToggle.Position = UDim2.new(0, 0, 0.46, 0) -- Дивиден между 
 teleportToggle.Text = "Toggle Teleport"
 teleportToggle.Font = Enum.Font.FredokaOne
 teleportToggle.TextScaled = true
-teleportToggle.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
+teleportToggle.BackgroundColor3 = Color3.fromRGB(188, 162, 97)
 teleportToggle.Parent = frame
 
 -- Надпись для выхода
 exitLabel.Size = UDim2.new(1, 0, 0, 30) -- Установите размер надписи
 exitLabel.Position = UDim2.new(0, 0, 0.9, 0) -- Установите позицию внизу
-exitLabel.Text = "Нажмите Q чтобы выйти из озерца"
+exitLabel.Text = "Press Q to exit"
 exitLabel.TextColor3 = Color3.fromRGB(0, 0, 0)
-exitLabel.Font = Enum.Font.FredokaOne
+exitLabel.Font = Enum.Font.Michroma
 exitLabel.TextScaled = true
-exitLabel.BackgroundColor3 = Color3.fromRGB(255, 255, 255) -- Фон, чтобы текст выделялся
+exitLabel.BackgroundColor3 = Color3.fromRGB(225, 223, 165) -- Фон, чтобы текст выделялся
 exitLabel.Parent = frame
 
 -- Функция для полета
